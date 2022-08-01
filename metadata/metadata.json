@@ -1,0 +1,18 @@
+{
+  "image": "ipfs://QmcdxC9E5kKTv7C9G3DJipxyKmts2zE2KXkK6THBb8d5vV",
+  "name": "Mobs",
+  "attributes": [
+    {
+      "trait_type": "Date Created",
+      "value": "20220726"
+    },
+    {
+      "trait_type": "Date Modified",
+      "value": "20220727"
+    },
+    {
+      "trait_type": "Created by",
+      "value": "0x123456..."
+    }
+  ]
+}
