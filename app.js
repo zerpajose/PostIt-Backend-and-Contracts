@@ -10,7 +10,7 @@ const Web3Token = require('web3-token');
 
 const { ethers } = require("ethers");
 
-const { DOCIT_CONTRACT_ADDRESS, DOCIT_CONTRACT_ABI } = require("./constants/index");
+const { POSTIT_CONTRACT_ADDRESS, POSTIT_CONTRACT_ABI } = require("./constants/index");
 
 const PINATA_BEARER = process.env.PINATA_BEARER;
 const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
@@ -99,9 +99,9 @@ async function getOwner(){
   
   const customHttpProvider = new ethers.providers.JsonRpcProvider(ALCHEMY_API_KEY_URL);
 
-  const docItContract = new ethers.Contract(DOCIT_CONTRACT_ADDRESS, DOCIT_CONTRACT_ABI, customHttpProvider);
+  const postItContract = new ethers.Contract(POSTIT_CONTRACT_ADDRESS, POSTIT_CONTRACT_ABI, customHttpProvider);
 
-  const contractOwner = await docItContract.owner();
+  const contractOwner = await postItContract.owner();
 
   return contractOwner;
 }

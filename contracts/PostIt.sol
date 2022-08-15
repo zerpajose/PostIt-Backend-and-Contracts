@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract DocIt is ERC721, ERC721URIStorage, Ownable {
+contract PostIt is ERC721, ERC721URIStorage, Ownable {
 
   using Counters for Counters.Counter;
   
@@ -20,7 +20,7 @@ contract DocIt is ERC721, ERC721URIStorage, Ownable {
 
   Counters.Counter private _tokenIdCounter;
 
-  constructor() ERC721("DocIt", "DOCIT") {}
+  constructor() ERC721("PostIt", "POSTIT") {}
 
   event minted(address indexed _from, string indexed _uri);
 
