@@ -10,6 +10,7 @@ contract DocIt is ERC721, ERC721URIStorage, Ownable {
 
   using Counters for Counters.Counter;
   
+  // uint -> id from document; address[4] -> list of collaborators
   mapping(uint => address[4]) public collaborators;
 
   // In order to mint an nft, user needs to deposit an stake (will be returned if burn the NFT)
@@ -22,6 +23,29 @@ contract DocIt is ERC721, ERC721URIStorage, Ownable {
   constructor() ERC721("DocIt", "DOCIT") {}
 
   event minted(address indexed _from, string indexed _uri);
+
+  // verify if caller is a collaborator
+  modifier onlyCollaboratorsAndOwner(uint _id) {
+
+    bool _flag1;
+    bool _flag2;
+
+    // if colaborator from this _id
+    for (uint256 index = 0; index < collaborators[_id].length; index++) {
+      if(collaborators[_id][index] == msg.sender){
+        _flag1 = true;
+        break;
+      }
+    }
+
+    // if owner from this _id
+    if (msg.sender == ownerOf(_id)){
+      _flag2 = true;
+    }
+
+    require(_flag1 || _flag2, "You are not a collaborator or owner");
+    _;
+  }
 
   function safeMint(string memory uri) public {
     require(allowList[msg.sender], "You are not in the AllowList");
@@ -42,13 +66,6 @@ contract DocIt is ERC721, ERC721URIStorage, Ownable {
 
   function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
     return super.tokenURI(tokenId);
-  }
-
-  //AllowList
-  // Add msg.sender to WL
-  function setAllowList() external payable {
-    require(stakeAmount <= msg.value, "Ether value sent is not correct");
-    allowList[msg.sender] = true;
   }
 
   // Only OwnerOf this _id can add collaborators
@@ -72,7 +89,6 @@ contract DocIt is ERC721, ERC721URIStorage, Ownable {
     else{
       revert("Number of collaborators maxedout (4)");
     }
-
   }
 
   // Only OwnerOf this _id can remove collaborators
@@ -99,10 +115,22 @@ contract DocIt is ERC721, ERC721URIStorage, Ownable {
     }
   }
 
+  //AllowList
+  // Add msg.sender to WL
+  function setAllowList() external payable {
+    require(stakeAmount <= msg.value, "Ether value sent is not correct");
+    allowList[msg.sender] = true;
+  }
+
   // Withdraw the Ether from the contract to the NFT owner
   function withdrawStake(uint _id) public {
     require(msg.sender == ownerOf(_id), "Not owner of this NFT");
     payable(msg.sender).transfer(stakeAmount);
     allowList[msg.sender] = false;
+  }
+
+  // Update URI from tokenID
+  function updatePostURI(uint _id, string memory _uri) public onlyCollaboratorsAndOwner(_id) {
+    _setTokenURI(_id, _uri);
   }
 }
