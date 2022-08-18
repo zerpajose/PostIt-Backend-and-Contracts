@@ -30,10 +30,10 @@ async function newPost(req, res) {
 
   const { address } = await Web3Token.verify(token);
 
-  const contractOwner = await getOwner();
+  const isAddressAllowed = await getIsAllowed(address);
 
-  if(ethers.utils.getAddress(address) !== ethers.utils.getAddress(contractOwner)){
-    res.json({msg: "Not Contract Owner"});
+  if(!isAddressAllowed){
+    res.json({msg: "You are not allowed to mint a PostIt"});
     res.end();
   }
 
@@ -104,6 +104,50 @@ async function getOwner(){
   const contractOwner = await postItContract.owner();
 
   return contractOwner;
+}
+
+app.post("/is_allowed", isAllowed);
+
+async function isAllowed(req, res) {
+
+  const token = req.headers['authorization'];
+
+  const { address, body } = await Web3Token.verify(token);
+
+  const isAddressAllowed = await getIsAllowed(address);
+
+  if(isAddressAllowed){
+
+    res.json({is_allowed: true, token: token, owner_address: ethers.utils.getAddress(contractOwner)});
+  }
+  else{
+    res.json({is_allowed: false, token: token});
+  }
+  res.end();
+}
+
+async function getIsAllowed(addr){
+  
+  const customHttpProvider = new ethers.providers.JsonRpcProvider(ALCHEMY_API_KEY_URL);
+
+  const postItContract = new ethers.Contract(POSTIT_CONTRACT_ADDRESS, POSTIT_CONTRACT_ABI, customHttpProvider);
+
+  const is_allowed = await postItContract.allowList(addr);
+
+  return is_allowed;
+}
+
+app.post("/sign_in", signIn);
+
+async function signIn(req, res) {
+
+  const token = req.headers['authorization'];
+
+  const { address, body } = await Web3Token.verify(token);
+
+  res.json({address: address, token: token});
+  
+  res.end();
 }
 
 app.listen(3001, () => {
