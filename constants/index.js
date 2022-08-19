@@ -1,4 +1,4 @@
-const POSTIT_CONTRACT_ADDRESS = '0x595521da4cDE85f68F1875801d84f9c8FA8e057A';
+const POSTIT_CONTRACT_ADDRESS = '0x0A6cc0e975E4b760cb1fdaA1E1ee01a06B324F0d';
 
 const POSTIT_CONTRACT_ABI = [
   {
@@ -240,6 +240,25 @@ const POSTIT_CONTRACT_ABI = [
     "inputs": [
       {
         "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      }
+    ],
+    "name": "getNftsIdsFromAddress",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "owner",
         "type": "address"
       },
@@ -300,6 +319,30 @@ const POSTIT_CONTRACT_ABI = [
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "postsPerAddress",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -515,6 +558,24 @@ const POSTIT_CONTRACT_ABI = [
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_uri",
+        "type": "string"
+      }
+    ],
+    "name": "updatePostURI",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -18,6 +18,9 @@ contract PostIt is ERC721, ERC721URIStorage, Ownable {
   // You will be added to AL when you do the stake deposit
   mapping(address => bool) public allowList;
 
+  // which nfts have an address
+  mapping(address => uint[]) public postsPerAddress;
+
   Counters.Counter private _tokenIdCounter;
 
   constructor() ERC721("PostIt", "POSTIT") {}
@@ -56,6 +59,7 @@ contract PostIt is ERC721, ERC721URIStorage, Ownable {
     _tokenIdCounter.increment();
     _safeMint(_to, tokenId);
     _setTokenURI(tokenId, uri);
+    postsPerAddress[_to].push(tokenId);
   }
 
   // The following functions are overrides required by Solidity.
@@ -132,5 +136,10 @@ contract PostIt is ERC721, ERC721URIStorage, Ownable {
   // Update URI from tokenID
   function updatePostURI(uint _id, string memory _uri) public onlyCollaboratorsAndOwner(_id) {
     _setTokenURI(_id, _uri);
+  }
+
+  // get nfts ids from address
+  function getNftsIdsFromAddress(address _owner) public view returns(uint[] memory) {
+    return postsPerAddress[_owner];
   }
 }

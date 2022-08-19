@@ -118,7 +118,7 @@ async function isAllowed(req, res) {
 
   if(isAddressAllowed){
 
-    res.json({is_allowed: true, token: token, owner_address: ethers.utils.getAddress(contractOwner)});
+    res.json({is_allowed: true, token: token});
   }
   else{
     res.json({is_allowed: false, token: token});
